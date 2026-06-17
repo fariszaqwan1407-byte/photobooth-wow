@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shafiqah ❤️ Faris Wedding Photobomb</title>
+<title>Shafiqah ❤️ Faris Photobomb</title>
 
 <style>
 body {
   margin: 0;
   font-family: Arial;
+  background: linear-gradient(135deg, #1a1a1a, #2b1b1b);
   color: white;
   text-align: center;
-  background: linear-gradient(135deg, #1a1a1a, #2b1b1b);
   overflow-x: hidden;
 }
 
@@ -87,6 +87,32 @@ video {
   max-width: 420px;
   border-radius: 12px;
 }
+
+/* COUNTDOWN OVERLAY */
+#countdown {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 90px;
+  background: rgba(0,0,0,0.6);
+  color: gold;
+  z-index: 999;
+}
+
+/* PREVIEW */
+#preview {
+  width: 90%;
+  max-width: 300px;
+  margin-top: 10px;
+  border-radius: 12px;
+  border: 2px solid gold;
+  display: none;
+}
 </style>
 </head>
 
@@ -112,6 +138,10 @@ video {
 <button onclick="capture()">📸 Ambil Gambar</button>
 <button onclick="upload()">☁️ Upload</button>
 
+<div id="countdown"></div>
+
+<img id="preview">
+
 <canvas id="canvas" style="display:none;"></canvas>
 
 <script>
@@ -121,6 +151,7 @@ let stream;
 
 const API_URL = "https://script.google.com/macros/s/AKfycbzF1ohpnbkIFMy0AsnbdqRRv02-12c2Nf_jMRIk3kRgY1MwqvHAGXYygqvxbxccSdIOpg/exec";
 
+/* CAMERA */
 async function startCamera() {
   if (stream) stream.getTracks().forEach(t => t.stop());
 
@@ -136,17 +167,45 @@ function switchCam() {
   startCamera();
 }
 
+/* COUNTDOWN + CAPTURE */
 function capture() {
-  let canvas = document.getElementById("canvas");
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
+  let countdown = document.getElementById("countdown");
+  let num = 3;
 
-  let ctx = canvas.getContext("2d");
-  ctx.drawImage(video, 0, 0);
+  countdown.style.display = "flex";
+  countdown.innerText = num;
 
-  alert("Gambar diambil ✔");
+  let timer = setInterval(() => {
+    num--;
+
+    if (num > 0) {
+      countdown.innerText = num;
+    } else {
+      clearInterval(timer);
+      countdown.style.display = "none";
+
+      let canvas = document.getElementById("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+
+      let ctx = canvas.getContext("2d");
+      ctx.drawImage(video, 0, 0);
+
+      // flash effect
+      document.body.style.opacity = "0.3";
+      setTimeout(() => document.body.style.opacity = "1", 150);
+
+      // preview
+      let preview = document.getElementById("preview");
+      preview.src = canvas.toDataURL("image/jpeg");
+      preview.style.display = "block";
+
+      alert("📸 SNAP!");
+    }
+  }, 1000);
 }
 
+/* UPLOAD */
 async function upload() {
   let canvas = document.getElementById("canvas");
   let image = canvas.toDataURL("image/jpeg").split(",")[1];
@@ -163,7 +222,13 @@ async function upload() {
   let data = await res.json();
 
   if (data.success) {
-    alert("❤️ Terima kasih! Gambar anda telah disimpan ❤️");
+    alert("❤️ Terima kasih! Gambar anda disimpan ❤️");
+
+    // reset
+    document.getElementById("name").value = "";
+    document.getElementById("msg").value = "";
+    document.getElementById("preview").style.display = "none";
+
   } else {
     alert("Upload gagal: " + data.error);
   }

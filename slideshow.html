@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cinematic Slideshow</title>
+
+<style>
+body{
+  margin:0;
+  background:black;
+  overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  position:absolute;
+  opacity:0;
+  transition:opacity 2s ease-in-out;
+  filter:brightness(0.8) contrast(1.1);
+}
+
+/* overlay text */
+.overlay{
+  position:absolute;
+  bottom:40px;
+  width:100%;
+  text-align:center;
+  color:gold;
+  font-size:22px;
+  font-family:Arial;
+  text-shadow:0 0 10px black;
+}
+</style>
+</head>
+
+<body>
+
+<img id="img1">
+<img id="img2">
+
+<div class="overlay">Shafiqah ❤️ Faris Wedding Moments</div>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbzF1ohpnbkIFMy0AsnbdqRRv02-12c2Nf_jMRIk3kRgY1MwqvHAGXYygqvxbxccSdIOpg/exec";
+
+let images = [];
+let index = 0;
+
+let img1 = document.getElementById("img1");
+let img2 = document.getElementById("img2");
+
+let current = true;
+
+async function loadImages(){
+  let res = await fetch(API_URL);
+  let data = await res.json();
+
+  images = data.files.map(f => f.url);
+}
+
+function showNext(){
+  if(images.length === 0) return;
+
+  index = (index + 1) % images.length;
+
+  let nextImg = current ? img2 : img1;
+  let activeImg = current ? img1 : img2;
+
+  nextImg.src = images[index];
+  nextImg.style.opacity = 1;
+  activeImg.style.opacity = 0;
+
+  current = !current;
+}
+
+/* INIT */
+loadImages();
+
+setInterval(() => {
+  loadImages();
+}, 15000); // refresh data
+
+setInterval(() => {
+  showNext();
+}, 4000); // tukar gambar setiap 4s
+</script>
+
+</body>
+</html>

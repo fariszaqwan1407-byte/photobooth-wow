@@ -3,63 +3,109 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shafiqah ❤️ Faris Photobomb</title>
+<title>Shafiqah ❤️ Faris Wedding Photobomb</title>
 
 <style>
 body {
   margin: 0;
   font-family: Arial;
-  background: #111;
   color: white;
   text-align: center;
+  background: linear-gradient(135deg, #1a1a1a, #2b1b1b);
+  overflow-x: hidden;
 }
 
-.header {
-  padding: 20px;
-  font-size: 22px;
+/* HEADER */
+.header h1 {
+  font-size: 28px;
+  background: linear-gradient(90deg, gold, #fff);
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 5px gold; }
+  to { text-shadow: 0 0 20px gold; }
+}
+
+/* SPARKLES */
+.sparkles::before {
+  content: "✨ 🌸 ✨ 🌸 ✨ 🌸 ✨ 🌸";
+  position: fixed;
+  top: -20px;
+  width: 100%;
+  opacity: 0.25;
+  animation: fall 10s linear infinite;
+}
+
+@keyframes fall {
+  from { transform: translateY(-100px); }
+  to { transform: translateY(100vh); }
+}
+
+/* CAMERA FRAME */
+.frame {
+  border: 3px solid gold;
+  border-radius: 16px;
+  padding: 6px;
+  display: inline-block;
+  box-shadow: 0 0 20px rgba(255,215,0,0.3);
+  margin-top: 10px;
+}
+
+/* INPUT */
+input, textarea {
+  width: 90%;
+  padding: 10px;
+  margin: 6px;
+  border-radius: 8px;
+  border: none;
+}
+
+/* BUTTON */
+button {
+  padding: 14px 18px;
+  margin: 6px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(90deg, gold, #ffd700);
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(255,215,0,0.4);
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 20px gold;
 }
 
 video {
   width: 100%;
   max-width: 420px;
   border-radius: 12px;
-  margin-top: 10px;
-}
-
-input, textarea {
-  width: 90%;
-  padding: 10px;
-  margin: 8px;
-  border-radius: 8px;
-  border: none;
-}
-
-button {
-  padding: 12px 18px;
-  margin: 8px;
-  border: none;
-  border-radius: 10px;
-  background: gold;
-  color: black;
-  font-weight: bold;
-  cursor: pointer;
 }
 </style>
 </head>
 
 <body>
 
+<div class="sparkles"></div>
+
 <div class="header">
-  Shafiqah ❤️ Faris <br>
-  Photobomb Wedding
+  <h1>Shafiqah ❤️ Faris</h1>
+  <p>Wedding Photobomb Experience</p>
 </div>
 
 <input id="name" placeholder="Nama anda">
 <textarea id="msg" placeholder="Ucapan"></textarea>
 
-<br>
+<div class="frame">
+  <video id="video" autoplay playsinline></video>
+</div>
 
-<video id="video" autoplay playsinline></video>
 <br>
 
 <button onclick="switchCam()">🔄 Tukar Kamera</button>
@@ -73,7 +119,7 @@ let video = document.getElementById("video");
 let useFront = true;
 let stream;
 
-const API_URL = "https://script.google.com/macros/s/AKfycbzmkMR5-TFbd9Zrr7QuBLfCMcTFDgBJThvepna2pMaI_jPr8JsK8wBABdfQHq9zBW6y8w/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzF1ohpnbkIFMy0AsnbdqRRv02-12c2Nf_jMRIk3kRgY1MwqvHAGXYygqvxbxccSdIOpg/exec";
 
 async function startCamera() {
   if (stream) stream.getTracks().forEach(t => t.stop());
@@ -98,15 +144,13 @@ function capture() {
   let ctx = canvas.getContext("2d");
   ctx.drawImage(video, 0, 0);
 
-  alert("Gambar diambil!");
+  alert("Gambar diambil ✔");
 }
 
 async function upload() {
   let canvas = document.getElementById("canvas");
-
   let image = canvas.toDataURL("image/jpeg").split(",")[1];
-
-  let name = document.getElementById("name").value;
+  let name = document.getElementById("name").value || "guest";
 
   let res = await fetch(API_URL, {
     method: "POST",
@@ -119,7 +163,7 @@ async function upload() {
   let data = await res.json();
 
   if (data.success) {
-    alert("Upload berjaya ❤️");
+    alert("❤️ Terima kasih! Gambar anda telah disimpan ❤️");
   } else {
     alert("Upload gagal: " + data.error);
   }

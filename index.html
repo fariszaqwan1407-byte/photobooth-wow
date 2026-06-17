@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shafiqah ❤️ Faris - Entry</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  color: white;
+  text-align: center;
+  background: radial-gradient(circle at top, #3a2b2b, #0f0f0f);
+  overflow: hidden;
+}
+
+/* FLOATING EFFECT */
+.particles::before {
+  content: "✨ 🌸 ✨ 🌸 ✨ 🌸 ✨ 🌸";
+  position: fixed;
+  width: 100%;
+  top: -20px;
+  opacity: 0.25;
+  animation: fall 12s linear infinite;
+}
+
+@keyframes fall {
+  from { transform: translateY(-100px); }
+  to { transform: translateY(100vh); }
+}
+
+/* CARD */
+.card {
+  margin-top: 70px;
+  background: rgba(255,255,255,0.08);
+  padding: 22px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  width: 85%;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 0 25px rgba(255,215,0,0.2);
+}
+
+input, textarea {
+  width: 90%;
+  padding: 12px;
+  margin: 8px;
+  border-radius: 10px;
+  border: none;
+}
+
+button {
+  padding: 14px 18px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(90deg, gold, #ffd700);
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(255,215,0,0.4);
+}
+
+h1 {
+  background: linear-gradient(90deg, gold, #fff);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+</style>
+</head>
+
+<body>
+
+<div class="particles"></div>
+
+<div class="card">
+  <h1>Shafiqah ❤️ Faris</h1>
+  <p>Wedding Photobomb Experience</p>
+
+  <input id="name" placeholder="Nama anda">
+  <textarea id="msg" placeholder="Ucapan untuk pengantin"></textarea>
+
+  <button onclick="next()">📸 Continue</button>
+</div>
+
+<script>
+function next() {
+  let name = document.getElementById("name").value;
+  let msg = document.getElementById("msg").value;
+
+  if (!name) {
+    alert("Sila isi nama");
+    return;
+  }
+
+  localStorage.setItem("name", name);
+  localStorage.setItem("msg", msg);
+
+  window.location.href = "camera.html";
+}
+</script>
+
+</body>
+</html>

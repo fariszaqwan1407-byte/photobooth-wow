@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body onload="startCamera()">
+
+<div class="camera-box">
+
+  <h2>Ambil Gambar</h2>
+
+  <video id="video" autoplay></video>
+  <canvas id="canvas" style="display:none;"></canvas>
+
+  <br>
+
+  <button onclick="capture()">📸 Capture</button>
+
+  <img id="preview" width="200">
+
+  <br>
+
+  <button onclick="location.href='frame.html'">
+    ➡ Seterusnya
+  </button>
+
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shafiqah ❤️ Faris Photobomb</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #111;
+  color: white;
+  text-align: center;
+}
+
+.header {
+  padding: 20px;
+  font-size: 22px;
+}
+
+video {
+  width: 100%;
+  max-width: 420px;
+  border-radius: 12px;
+  margin-top: 10px;
+}
+
+input, textarea {
+  width: 90%;
+  padding: 10px;
+  margin: 8px;
+  border-radius: 8px;
+  border: none;
+}
+
+button {
+  padding: 12px 18px;
+  margin: 8px;
+  border: none;
+  border-radius: 10px;
+  background: gold;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  Shafiqah ❤️ Faris <br>
+  Photobomb Wedding
+</div>
+
+<input id="name" placeholder="Nama anda">
+<textarea id="msg" placeholder="Ucapan"></textarea>
+
+<br>
+
+<video id="video" autoplay playsinline></video>
+<br>
+
+<button onclick="switchCam()">🔄 Tukar Kamera</button>
+<button onclick="capture()">📸 Ambil Gambar</button>
+<button onclick="upload()">☁️ Upload</button>
+
+<canvas id="canvas" style="display:none;"></canvas>
+
+<script>
+let video = document.getElementById("video");
+let useFront = true;
+let stream;
+
+const API_URL = "https://script.google.com/macros/s/AKfycbzmkMR5-TFbd9Zrr7QuBLfCMcTFDgBJThvepna2pMaI_jPr8JsK8wBABdfQHq9zBW6y8w/exec";
+
+async function startCamera() {
+  if (stream) stream.getTracks().forEach(t => t.stop());
+
+  stream = await navigator.mediaDevices.getUserMedia({
+    video: { facingMode: useFront ? "user" : "environment" }
+  });
+
+  video.srcObject = stream;
+}
+
+function switchCam() {
+  useFront = !useFront;
+  startCamera();
+}
+
+function capture() {
+  let canvas = document.getElementById("canvas");
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+
+  let ctx = canvas.getContext("2d");
+  ctx.drawImage(video, 0, 0);
+
+  alert("Gambar diambil!");
+}
+
+async function upload() {
+  let canvas = document.getElementById("canvas");
+
+  let image = canvas.toDataURL("image/jpeg").split(",")[1];
+
+  let name = document.getElementById("name").value;
+
+  let res = await fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      name: name,
+      image: image
+    })
+  });
+
+  let data = await res.json();
+
+  if (data.success) {
+    alert("Upload berjaya ❤️");
+  } else {
+    alert("Upload gagal: " + data.error);
+  }
+}
+
+startCamera();
+</script>
+
+</body>
+</html>

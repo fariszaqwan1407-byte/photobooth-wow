@@ -35,7 +35,7 @@ function uploadImage(){
 
 /* GALLERY */
 function loadGallery(){
-  fetch("YOUR_SCRIPT_URL?gallery=1")
+  fetch("https://script.google.com/macros/s/AKfycbzytoe3XqFhQkYc65NquU0gedqSruev39a7yVBPp_2pLETEK90g7t_3GRKunNBx5RyKLA/execgallery=1")
   .then(r=>r.json())
   .then(data=>{
     const box = document.getElementById("gallery");
